@@ -22,3 +22,5 @@ Route::group(['middleware' => 'TwoFA'],function (){
 
 });
 
+Route::post('/verifyOTP','VerifyOTPController@verify');
+
