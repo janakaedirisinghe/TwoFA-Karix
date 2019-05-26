@@ -37,13 +37,14 @@ class User extends Authenticatable
     }
     public function cacheTheOTP(){
         $OTP = rand(10000,999999);
-        Cache::put(['OTP' => $OTP],now()->addSecond(20));
+        Cache::put(["OTP_for_{$this->id}" => $OTP],now()->addSecond(20));
+        return $OTP;
 
     }
 
     public function sendOTP(){
-        $this->cacheTheOTP(); 
-        Mail::to('janakapradeepedirisinghe@gmail.com')->send(new OTPMail($this->OTP()));
+
+        Mail::to('janakapradeepedirisinghe@gmail.com')->send(new OTPMail($this->cacheTheOTP()));
 
     }
 
