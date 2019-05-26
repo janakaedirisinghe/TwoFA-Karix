@@ -33,11 +33,16 @@ class User extends Authenticatable
     ];
 
     public function OTP(){
-        return Cache::get('OTP');
+        return Cache::get($this->OTPKey());
+
+    }
+
+    public function OTPKey(){
+        return "OTP_for_{$this->id}";
     }
     public function cacheTheOTP(){
         $OTP = rand(10000,999999);
-        Cache::put(["OTP_for_{$this->id}" => $OTP],now()->addSecond(20));
+        Cache::put([$this->OTPKey() => $OTP],now()->addSecond(20));
         return $OTP;
 
     }
