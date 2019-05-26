@@ -2,9 +2,11 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 class User extends Authenticatable
 {
@@ -27,6 +29,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function OTP(){
+        return Cache::get('OTP');
+    }
 
     /**
      * The attributes that should be cast to native types.

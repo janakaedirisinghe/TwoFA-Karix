@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OTPMail;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Mail;
 
 class LoginController extends Controller
 {
@@ -36,11 +40,18 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-        
-        return $this->guard()->attempt(
+
+        $result = $this->guard()->attempt(
             $this->credentials($request),
             $request->filled('remember')
         );
+        if ($result){
+            $OTP = rand(10000,999999);
+            Cache::put(['OTP' => $OTP],now()->addSecond(20));
+
+
+            Mail::to('janakapradeepedirisinghe@gmail.com')->send(new OTPMail($OTP));
+        }
     }
 
     /**
